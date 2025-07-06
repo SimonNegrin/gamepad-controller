@@ -21,8 +21,9 @@
     emit(event)
   }
   
-  function ontouchend(event: TouchEvent): void {
+  function ontouchend(): void {
     captured = false
+    oninput({ x: 0, y: 0 })
   }
 
   function emit(event: TouchEvent): void {

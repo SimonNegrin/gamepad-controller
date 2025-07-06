@@ -1,12 +1,33 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
-  import type { Point } from '../vite-env'
+  import type { GamepadStatus, Point, TriggerStatus } from '../vite-env'
   import Joystick from './Joystick.svelte'
+  import Trigger from './Trigger.svelte'
+
+  let {
+    oninput
+  }: {
+    oninput: (status: GamepadStatus) => void
+  } = $props()
 
   let showPortraitWarn = $state(isDeviceVertical())
-
-  function onJoystickInput(point: Point): void {
-    console.log(point)
+  let gamepadStatus: GamepadStatus = {
+    joystick: {
+      x: 0,
+      y: 0
+    },
+    triggerA: {
+      isPressed: false
+    },
+    triggerB: {
+      isPressed: false
+    },
+    triggerC: {
+      isPressed: false
+    },
+    start: {
+      isPressed: false
+    }
   }
 
   function onorientationchange(): void {
@@ -15,6 +36,38 @@
 
   function isDeviceVertical(): boolean {
     return screen.orientation.type.startsWith('portrait')
+  }
+
+  function onJoystickInput(joystick: Point): void {
+    gamepadStatus = {
+      ...gamepadStatus,
+      joystick
+    }
+    oninput(gamepadStatus)
+  }
+
+  function onTriggerAInput(triggerA: TriggerStatus): void {
+    gamepadStatus = {
+      ...gamepadStatus,
+      triggerA
+    }
+    oninput(gamepadStatus)
+  }
+
+  function onTriggerBInput(triggerB: TriggerStatus): void {
+    gamepadStatus = {
+      ...gamepadStatus,
+      triggerB
+    }
+    oninput(gamepadStatus)
+  }
+
+  function onTriggerCInput(triggerC: TriggerStatus): void {
+    gamepadStatus = {
+      ...gamepadStatus,
+      triggerC
+    }
+    oninput(gamepadStatus)
   }
 
 </script>
@@ -28,9 +81,15 @@
   <div class="ctrl joystick-wrapper">
     <Joystick oninput={onJoystickInput} />
   </div>
-  <div class="ctrl trigger trigger-a"></div>
-  <div class="ctrl trigger trigger-b"></div>
-  <div class="ctrl trigger trigger-c"></div>
+  <div class="ctrl trigger trigger-a">
+    <Trigger oninput={onTriggerAInput} />
+  </div>
+  <div class="ctrl trigger trigger-b">
+    <Trigger oninput={onTriggerBInput} />
+  </div>
+  <div class="ctrl trigger trigger-c">
+    <Trigger oninput={onTriggerCInput} />
+  </div>
   <div class="ctrl btn-start"></div>
 </main>
 
