@@ -1,5 +1,16 @@
+<script lang="ts">
+  import type { Point } from '../vite-env'
+  import Joystick from './Joystick.svelte'
+
+  function onJoystickInput(point: Point): void {
+    console.log(point)
+  }
+
+</script>
 <main>
-  <div class="ctrl joystick-wrapper"></div>
+  <div class="ctrl joystick-wrapper">
+    <Joystick oninput={onJoystickInput} />
+  </div>
   <div class="ctrl btn btn-a"></div>
   <div class="ctrl btn btn-b"></div>
   <div class="ctrl btn btn-c"></div>
@@ -8,6 +19,7 @@
 
 <style>
   main {
+    touch-action: none;
     position: relative;
     width: 100vw;
     height: 100vh;
