@@ -99,7 +99,7 @@
 <main bind:this={mainEl}>
 
   {#if isPaused}
-    <div class="pause-screen" transition:fade>
+    <div class="pause-screen" in:fade>
       <button type="button" onclick={onContinue}>Continuar</button>
       <button type="button" onclick={onToggleFullscreen}>Full Screen</button>
     </div>
@@ -111,20 +111,22 @@
     </div>
   {/if}
 
-  <div class="ctrl joystick-wrapper">
-    <Joystick oninput={onJoystickInput} />
-  </div>
-  <div class="ctrl trigger trigger-a">
-    <Trigger oninput={onTriggerAInput} />
-  </div>
-  <div class="ctrl trigger trigger-b">
-    <Trigger oninput={onTriggerBInput} />
-  </div>
-  <div class="ctrl trigger trigger-c">
-    <Trigger oninput={onTriggerCInput} />
-  </div>
-  <div class="ctrl btn-start">
-    <Start oninput={onStartInput} />
+  <div class="gamepad">
+    <div class="ctrl joystick-wrapper">
+      <Joystick oninput={onJoystickInput} />
+    </div>
+    <div class="ctrl trigger trigger-a">
+      <Trigger oninput={onTriggerAInput} />
+    </div>
+    <div class="ctrl trigger trigger-b">
+      <Trigger oninput={onTriggerBInput} />
+    </div>
+    <div class="ctrl trigger trigger-c">
+      <Trigger oninput={onTriggerCInput} />
+    </div>
+    <div class="ctrl btn-start">
+      <Start oninput={onStartInput} />
+    </div>
   </div>
 </main>
 
@@ -137,11 +139,17 @@
     width: 100vw;
     height: 100vh;
     background-color: oklch(14.5% 0 0);
-    background-image: url('/megadrive_gamepad.png');
-    background-size: calc(100% + 40px) auto;
-    background-position: -20px center;
-    background-repeat: no-repeat;
   }
+  .gamepad {
+    position: relative;
+    left: -40px;
+    width: calc(100% + 60px);
+    aspect-ratio: 1686 / 988;
+    background-image: url('/megadrive_gamepad.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
   .pause-screen {
     position: absolute;
     z-index: 10;
@@ -155,11 +163,12 @@
     display: flex;
     flex-direction: column;
     align-items: end;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .pause-screen button {
     font-size: 1.2rem;
+    padding: 0.5rem 1rem;
   }
 
   .portrait-warn {
@@ -180,36 +189,36 @@
   }
   .ctrl {
     position: absolute;
-    background-color: rgba(248, 255, 157, 0.405);
+    /* background-color: rgba(248, 255, 157, 0.405); */
   }
   .joystick-wrapper {
-    left: 5%;
-    width: 33%;
-    top: 17%;
+    left: 11%;
+    top: 26%;
+    width: 24.5%;
     aspect-ratio: 1;
 
   }
   .trigger {
-    width: 10%;
+    width: 9%;
     aspect-ratio: 1;
   }
   .trigger-a {
     top: 49%;
-    left: 63%;
+    left: 62.5%;
   }
   .trigger-b {
-    top: 39%;
-    left: 74%;
+    top: 40%;
+    left: 72.5%;
   }
   .trigger-c {
-    top: 31%;
-    left: 85%;
+    top: 33%;
+    left: 82.5%;
   }
   .btn-start {
-    width: 12%;
+    width: 11%;
     aspect-ratio: 3;
-    left: 66%;
-    top: 17%;
+    left: 65%;
+    top: 20.5%;
     transform: rotate(-25deg);
   }
 </style>
