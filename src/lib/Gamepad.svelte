@@ -3,6 +3,7 @@
   import type { GamepadStatus, Point, TriggerStatus } from '../vite-env'
   import Joystick from './Joystick.svelte'
   import Trigger from './Trigger.svelte'
+  import Start from './Start.svelte'
 
   let {
     oninput
@@ -69,6 +70,14 @@
     }
     oninput(gamepadStatus)
   }
+  
+  function onStartInput(start: TriggerStatus): void {
+    gamepadStatus = {
+      ...gamepadStatus,
+      start
+    }
+    oninput(gamepadStatus)
+  }
 
 </script>
 <main>
@@ -90,7 +99,9 @@
   <div class="ctrl trigger trigger-c">
     <Trigger oninput={onTriggerCInput} />
   </div>
-  <div class="ctrl btn-start"></div>
+  <div class="ctrl btn-start">
+    <Start oninput={onStartInput} />
+  </div>
 </main>
 
 <svelte:window onorientationchange={onorientationchange} />
@@ -101,7 +112,7 @@
     position: relative;
     width: 100vw;
     height: 100vh;
-    background-color: rgb(20, 20, 20);
+    background-color: oklch(14.5% 0 0);
     background-image: url('/megadrive_gamepad.png');
     background-size: calc(100% + 40px) auto;
     background-position: -20px center;
