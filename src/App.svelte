@@ -1,17 +1,21 @@
 <script lang="ts">
+  import ControlBinding from './lib/ControlBinding.svelte'
   import Gamepad from './lib/Gamepad.svelte'
-  import QrScan from './lib/QrScan.svelte'
-  import type { GamepadStatus } from './vite-env'
+  import type { Connection, GamepadStatus } from './vite-env'
+
+  let connection: Connection
 
   function onGamepadInput(gamepadStatus: GamepadStatus): void {
     console.log(gamepadStatus)
   }
 
-  function onResult(roomId: string): void {
-    console.log({ roomId })
+  function onConnected(conn: Connection): void {
+    connection = conn
   }
-
 </script>
 
-<!-- <Gamepad oninput={onGamepadInput} /> -->
-<QrScan onresult={onResult} />
+{#if connection}
+  <Gamepad oninput={onGamepadInput} />
+{:else}
+  <ControlBinding onconnected={onConnected} />
+{/if}

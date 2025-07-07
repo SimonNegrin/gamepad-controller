@@ -17,3 +17,8 @@ export type GamepadStatus = {
   triggerC: TriggerStatus
   start: TriggerStatus
 }
+
+export type Connection = {
+  peerConnection: RTCPeerConnection
+  dataChannel: RTCDataChannel
+}

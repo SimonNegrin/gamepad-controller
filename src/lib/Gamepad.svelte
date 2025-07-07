@@ -11,6 +11,8 @@
     oninput: (status: GamepadStatus) => void
   } = $props()
 
+  let mainEl: HTMLElement
+  let isPaused = $state(false)
   let showPortraitWarn = $state(isDeviceVertical())
   let gamepadStatus: GamepadStatus = {
     joystick: {
@@ -72,6 +74,9 @@
   }
   
   function onStartInput(start: TriggerStatus): void {
+    if (start.isPressed) {
+      isPaused = !isPaused
+    }
     gamepadStatus = {
       ...gamepadStatus,
       start
@@ -79,8 +84,27 @@
     oninput(gamepadStatus)
   }
 
+  function onContinue(): void {
+    onStartInput({
+      isPressed: true
+    })
+  }
+
+  function onToggleFullscreen(): void {
+    document.fullscreenElement
+      ? document.exitFullscreen()
+      : mainEl.requestFullscreen()
+  }
 </script>
-<main>
+<main bind:this={mainEl}>
+
+  {#if isPaused}
+    <div class="pause-screen" transition:fade>
+      <button type="button" onclick={onContinue}>Continuar</button>
+      <button type="button" onclick={onToggleFullscreen}>Full Screen</button>
+    </div>
+  {/if}
+
   {#if showPortraitWarn}
     <div class="portrait-warn" transition:fade>
       <div>Coloca el dispositivo en horizontal</div>
@@ -118,9 +142,29 @@
     background-position: -20px center;
     background-repeat: no-repeat;
   }
-  .portrait-warn {
+  .pause-screen {
     position: absolute;
     z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 1rem;
+  }
+
+  .pause-screen button {
+    font-size: 1.2rem;
+  }
+
+  .portrait-warn {
+    position: absolute;
+    z-index: 20;
     top: 0;
     left: 0;
     width: 100%;
@@ -136,7 +180,7 @@
   }
   .ctrl {
     position: absolute;
-    /* background-color: rgba(248, 255, 157, 0.405); */
+    background-color: rgba(248, 255, 157, 0.405);
   }
   .joystick-wrapper {
     left: 5%;
