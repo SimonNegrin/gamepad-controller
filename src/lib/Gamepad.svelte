@@ -85,9 +85,8 @@
   }
 
   function onContinue(): void {
-    onStartInput({
-      isPressed: true
-    })
+    onStartInput({ isPressed: true })
+    onStartInput({ isPressed: false })
   }
 
   function onToggleFullscreen(): void {
