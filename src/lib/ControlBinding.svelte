@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import type { Connection } from "../vite-env"
   import QrScan from "./QrScan.svelte"
   import { createSignalingConnection, ICE_SERVERS } from "./services"
@@ -15,6 +16,14 @@
   let peerConnection: RTCPeerConnection
   let signalingConnection: SignalingConnection
   let dataChannel: RTCDataChannel
+
+  onMount(() => {
+    const currentUrl = new URL(location.href)
+    if (currentUrl.searchParams.has('r')) {
+      const roomId = currentUrl.searchParams.get('r')!
+      initSignaling(roomId)
+    }
+  })
 
   function onResult(roomId: string): void {
     console.log("RoomID detect:", roomId)

@@ -1,13 +1,11 @@
 import SignalingConnection from "./SignalingConnection"
 
-const WS_SERVER_URL = "ws://localhost:6100"
-
 export async function createSignalingConnection(
   roomId: string
 ): Promise<SignalingConnection> {
-  const signalingConnection = new SignalingConnection(WS_SERVER_URL)
+  const signalingConnection = new SignalingConnection(import.meta.env.VITE_SIGNALING_SERVER)
   await signalingConnection.connect()
-  await signalingConnection.joinRoom(roomId)
+  signalingConnection.joinRoom(roomId)
   return signalingConnection
 }
 
