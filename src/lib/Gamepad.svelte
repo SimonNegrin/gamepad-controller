@@ -12,7 +12,6 @@
   } = $props()
 
   let mainEl: HTMLElement
-  let isPaused = $state(false)
   let showPortraitWarn = $state(isDeviceVertical())
   let gamepadStatus: GamepadStatus = {
     joystick: {
@@ -74,19 +73,11 @@
   }
   
   function onStartInput(start: TriggerStatus): void {
-    if (start.isPressed) {
-      isPaused = !isPaused
-    }
     gamepadStatus = {
       ...gamepadStatus,
       start
     }
     oninput(gamepadStatus)
-  }
-
-  function onContinue(): void {
-    onStartInput({ isPressed: true })
-    onStartInput({ isPressed: false })
   }
 
   function onToggleFullscreen(): void {
@@ -96,14 +87,6 @@
   }
 </script>
 <main bind:this={mainEl}>
-
-  {#if isPaused}
-    <div class="pause-screen" in:fade>
-      <button type="button" onclick={onContinue}>Continuar</button>
-      <button type="button" onclick={onToggleFullscreen}>Full Screen</button>
-    </div>
-  {/if}
-
   {#if showPortraitWarn}
     <div class="portrait-warn" transition:fade>
       <div>Coloca el dispositivo en horizontal</div>
@@ -126,6 +109,12 @@
     <div class="ctrl btn-start">
       <Start oninput={onStartInput} />
     </div>
+    <button
+      type="button"
+      class="ctrl btn-fullscreen"
+      onclick={onToggleFullscreen}
+      aria-label="Fullscreen"
+    ></button>
   </div>
 </main>
 
@@ -135,6 +124,7 @@
   main {
     touch-action: none;
     position: relative;
+    overflow: hidden;
     width: 100vw;
     height: 100vh;
     background-color: oklch(14.5% 0 0);
@@ -148,28 +138,6 @@
     background-repeat: no-repeat;
     background-size: contain;
   }
-
-  .pause-screen {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(5px);
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    gap: 0.5rem;
-  }
-
-  .pause-screen button {
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
-  }
-
   .portrait-warn {
     position: absolute;
     z-index: 20;
@@ -188,6 +156,8 @@
   }
   .ctrl {
     position: absolute;
+    background-color: transparent;
+    border: none;
     /* background-color: rgba(248, 255, 157, 0.405); */
   }
   .joystick-wrapper {
@@ -219,5 +189,11 @@
     left: 65%;
     top: 20.5%;
     transform: rotate(-25deg);
+  }
+  .btn-fullscreen {
+    width: 11%;
+    aspect-ratio: 3;
+    left: 45.75%;
+    top: 23.5%;
   }
 </style>

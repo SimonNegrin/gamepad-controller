@@ -12,6 +12,7 @@
     onconnected: (connection: Connection) => void
   } = $props()
 
+  let isMount = $state(false)
   let isSignaling = $state(false)
   let peerConnection: RTCPeerConnection
   let signalingConnection: SignalingConnection
@@ -23,6 +24,7 @@
       const roomId = currentUrl.searchParams.get('r')!
       initSignaling(roomId)
     }
+    isMount = true
   })
 
   function onResult(roomId: string): void {
@@ -80,15 +82,17 @@
   }
 </script>
 
-<div class="control-binding">
-  {#if isSignaling}
-    <div class="inner">
-      <Signaling />
-    </div>
-  {:else}
-    <QrScan onresult={onResult} />
-  {/if}
-</div>
+{#if isMount}
+  <div class="control-binding">
+    {#if isSignaling}
+      <div class="inner">
+        <Signaling />
+      </div>
+    {:else}
+      <QrScan onresult={onResult} />
+    {/if}
+  </div>
+{/if}
 
 <style>
   .control-binding {
