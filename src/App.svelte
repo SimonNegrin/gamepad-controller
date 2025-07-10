@@ -9,8 +9,8 @@
   let connection: Connection
 
   function onGamepadInput(gamepadStatus: GamepadStatus): void {
-    const packet = createGamepadUpdatePacket(gamepadStatus)
-    connection.dataChannel.send(packet.buffer)
+    // const packet = createGamepadUpdatePacket(gamepadStatus)
+    // connection.dataChannel.send(packet.buffer)
   }
 
   function onConnected(conn: Connection): void {
@@ -58,8 +58,9 @@
   }
 </script>
 
-{#if connection}
+<Gamepad oninput={onGamepadInput} />
+<!-- {#if connection}
   <Gamepad oninput={onGamepadInput} />
 {:else}
   <ControlBinding onconnected={onConnected} />
-{/if}
+{/if} -->

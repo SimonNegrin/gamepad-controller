@@ -1,12 +1,14 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition'
-  import type { GamepadStatus, Point, TriggerStatus } from '../vite-env'
-  import Joystick from './Joystick.svelte'
-  import Trigger from './Trigger.svelte'
-  import Start from './Start.svelte'
+  import { fade } from "svelte/transition"
+  import type { GamepadStatus, Point, TriggerStatus } from "../vite-env"
+  import Joystick from "./Joystick.svelte"
+  import Trigger from "./Trigger.svelte"
+  import Start from "./Start.svelte"
+  import WarnScreen from "./WarnScreen.svelte"
+  import WarningTriangle from "./icons/WarningTriangle.svelte"
 
   let {
-    oninput
+    oninput,
   }: {
     oninput: (status: GamepadStatus) => void
   } = $props()
@@ -16,20 +18,20 @@
   let gamepadStatus: GamepadStatus = {
     joystick: {
       x: 0,
-      y: 0
+      y: 0,
     },
     triggerA: {
-      isPressed: false
+      isPressed: false,
     },
     triggerB: {
-      isPressed: false
+      isPressed: false,
     },
     triggerC: {
-      isPressed: false
+      isPressed: false,
     },
     start: {
-      isPressed: false
-    }
+      isPressed: false,
+    },
   }
 
   function onorientationchange(): void {
@@ -37,13 +39,13 @@
   }
 
   function isDeviceVertical(): boolean {
-    return screen.orientation.type.startsWith('portrait')
+    return screen.orientation.type.startsWith("portrait")
   }
 
   function onJoystickInput(joystick: Point): void {
     gamepadStatus = {
       ...gamepadStatus,
-      joystick
+      joystick,
     }
     oninput(gamepadStatus)
   }
@@ -51,7 +53,7 @@
   function onTriggerAInput(triggerA: TriggerStatus): void {
     gamepadStatus = {
       ...gamepadStatus,
-      triggerA
+      triggerA,
     }
     oninput(gamepadStatus)
   }
@@ -59,7 +61,7 @@
   function onTriggerBInput(triggerB: TriggerStatus): void {
     gamepadStatus = {
       ...gamepadStatus,
-      triggerB
+      triggerB,
     }
     oninput(gamepadStatus)
   }
@@ -67,15 +69,15 @@
   function onTriggerCInput(triggerC: TriggerStatus): void {
     gamepadStatus = {
       ...gamepadStatus,
-      triggerC
+      triggerC,
     }
     oninput(gamepadStatus)
   }
-  
+
   function onStartInput(start: TriggerStatus): void {
     gamepadStatus = {
       ...gamepadStatus,
-      start
+      start,
     }
     oninput(gamepadStatus)
   }
@@ -86,11 +88,15 @@
       : mainEl.requestFullscreen()
   }
 </script>
+
 <main bind:this={mainEl}>
   {#if showPortraitWarn}
-    <div class="portrait-warn" transition:fade>
-      <div>Coloca el dispositivo en horizontal</div>
-    </div>
+    <WarnScreen>
+      <div class="portrait-warn">
+        <div class="warn-triangle"><WarningTriangle /></div>
+        Coloca el dispositivo<br>en horizontal
+      </div>
+    </WarnScreen>
   {/if}
 
   <div class="gamepad">
@@ -118,7 +124,7 @@
   </div>
 </main>
 
-<svelte:window onorientationchange={onorientationchange} />
+<svelte:window {onorientationchange} />
 
 <style>
   main {
@@ -135,25 +141,17 @@
     left: -40px;
     width: calc(100% + 60px);
     aspect-ratio: 1686 / 988;
-    background-image: url('/megadrive_gamepad.png');
+    background-image: url("/megadrive_gamepad.png");
     background-repeat: no-repeat;
     background-size: contain;
   }
   .portrait-warn {
-    position: absolute;
-    z-index: 20;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: red;
-    color: #fff;
-    font-size: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
     text-align: center;
+    padding: 2rem;
+    font-size: 2rem;
+  }
+  .warn-triangle {
+    font-size: 5rem;
   }
   .ctrl {
     position: absolute;
@@ -166,7 +164,6 @@
     top: 26%;
     width: 24.5%;
     aspect-ratio: 1;
-
   }
   .trigger {
     --radius: 40px;
