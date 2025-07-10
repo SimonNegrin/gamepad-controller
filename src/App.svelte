@@ -4,7 +4,7 @@
   import Vector2 from "./lib/services/Vector2"
   import type { Connection, GamepadStatus } from "./vite-env"
 
-  const JOYSTICK_THRESHOLD = 32
+  const JOYSTICK_THRESHOLD = 25
 
   let connection: Connection
 
