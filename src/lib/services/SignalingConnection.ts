@@ -46,6 +46,10 @@ export default class SignalingConnection {
     })
   }
 
+  disconnect(): void {
+    this.socket?.close()
+  }
+
   async createRoom(roomId: string): Promise<void> {
     if (this.roomId) {
       throw new Error("Room ID already set")

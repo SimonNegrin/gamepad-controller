@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import type { Connection } from "../vite-env"
   import QrScan from "./QrScan.svelte"
   import { createSignalingConnection, ICE_SERVERS } from "./services"
@@ -25,6 +25,10 @@
       initSignaling(roomId)
     }
     isMount = true
+  })
+
+  onDestroy(() => {
+    signalingConnection?.disconnect()
   })
 
   function onResult(roomId: string): void {
