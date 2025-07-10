@@ -11,6 +11,8 @@ export default class SignalingConnection {
   private socket?: WebSocket
   private events = new Map<EventName, Set<EventHandler>>()
   private roomId?: string
+  private pingTimeout?: number
+  private pingDelay = 15_000
 
   constructor(private readonly serverUrl: string) {}
 
@@ -23,10 +25,12 @@ export default class SignalingConnection {
       this.socket = new WebSocket(this.serverUrl)
 
       this.socket.addEventListener("open", () => {
+        this.preparePing()
         resolve()
       })
 
       this.socket.addEventListener("close", (event) => {
+        window.clearTimeout(this.pingTimeout)
         this.dispatch("disconnect", event.reason)
         reject(event.reason)
       })
@@ -114,5 +118,14 @@ export default class SignalingConnection {
     if (this.socket?.readyState !== WebSocket.OPEN) {
       throw new Error("Socket is not open")
     }
+  }
+
+  private preparePing(): void {
+    this.checkSocketOpen()
+    window.clearTimeout(this.pingTimeout)
+    this.pingTimeout = window.setTimeout(() => {
+      this.socket!.send(JSON.stringify({ type: 'ping' }))
+      this.preparePing()
+    }, this.pingDelay)
   }
 }
