@@ -131,6 +131,7 @@
   }
   .gamepad {
     position: relative;
+    top: -10px;
     left: -40px;
     width: calc(100% + 60px);
     aspect-ratio: 1686 / 988;
@@ -168,20 +169,26 @@
 
   }
   .trigger {
-    width: 9%;
+    --radius: 40px;
+    width: 10%;
     aspect-ratio: 1;
+    overflow: hidden;
   }
   .trigger-a {
-    top: 49%;
-    left: 62.5%;
+    top: 48%;
+    left: 62%;
+    border-top-right-radius: var(--radius);
   }
   .trigger-b {
-    top: 40%;
-    left: 72.5%;
+    top: 39%;
+    left: 72%;
+    border-top-right-radius: var(--radius);
+    border-bottom-left-radius: var(--radius);
   }
   .trigger-c {
     top: 33%;
-    left: 82.5%;
+    left: 82%;
+    border-bottom-left-radius: var(--radius);
   }
   .btn-start {
     width: 11%;
