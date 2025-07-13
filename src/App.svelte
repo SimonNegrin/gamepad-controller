@@ -4,7 +4,7 @@
   import Vector2 from "./lib/services/Vector2"
   import type { Connection, GamepadStatus } from "./vite-env"
 
-  const JOYSTICK_THRESHOLD = 25
+  const JOYSTICK_THRESHOLD = 30
 
   let connection: Connection
 
@@ -36,13 +36,13 @@
     if (angle.length > JOYSTICK_THRESHOLD) {
       const deg = angle.angleDegAbs
       // Top
-      if (deg >= 45 && deg < 135) buttonsByte |= 1 << 7
+      if (deg > 22.5 && deg < 157.5) buttonsByte |= 1 << 7
       // Right
-      if (deg < 45 || deg >= 315) buttonsByte |= 1 << 6
+      if (deg < 67.5 || deg > 292.5) buttonsByte |= 1 << 6
       // Bottom
-      if (deg >= 225 && deg < 315) buttonsByte |= 1 << 5
+      if (deg < 337.5 && deg > 202.5) buttonsByte |= 1 << 5
       // Left
-      if (deg >= 135 && deg < 225) buttonsByte |= 1 << 4
+      if (deg > 112.5 && deg < 247.5) buttonsByte |= 1 << 4
     }
 
     // Triggers
